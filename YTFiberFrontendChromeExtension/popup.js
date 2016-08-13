@@ -36,12 +36,12 @@ function sendNativeMessage() {
 }
 
 function sendPythonMessage() {
-  message = {"subfolder": document.getElementById('subfolder-name').value};
+  message = {"subfolder": document.getElementById('machine_name').getAttribute("value"), "newfolder": document.getElementById('subfolder-name').value};
   port.postMessage(message);
 }
 
 function onNativeMessage(message) {
-  appendMessage("Received message: <b>" + JSON.stringify(message) + "</b>");
+  //appendMessage("Received message: <b>" + JSON.stringify(message) + "</b>");
 }
 
 function onDisconnected() {
@@ -57,7 +57,7 @@ function connect() {
 document.addEventListener('DOMContentLoaded', function () {
   //startup messaging port
   var hostName = "com.ytfiber";
-  appendMessage("Connecting to native messaging host <b>" + hostName + "</b>")
+  //appendMessage("Connecting to native messaging host <b>" + hostName + "</b>")
   port = chrome.runtime.connectNative(hostName);
   port.onMessage.addListener(onNativeMessage);
   port.onDisconnect.addListener(onDisconnected);
@@ -75,11 +75,23 @@ document.addEventListener('DOMContentLoaded', function () {
     $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
   });
 
-  $("#option1").click(function() {
-    $('#machine_name').val('k80');
+  $("#music3").click(function() {
+    $('#machine_name').val('Music 3');
   });
 
-  $("#option2").click(function() {
-    $('#machine_name').val('titanx');
+  $("#music2").click(function() {
+    $('#machine_name').val('Music 2');
+  });
+
+  $("#music").click(function() {
+    $('#machine_name').val('Music');
+  });
+
+  $("#education").click(function() {
+    $('#machine_name').val('Education');
+  });
+
+  $("#ytfiberdl").click(function() {
+    $('#machine_name').val('YTFiberDL');
   });
 });

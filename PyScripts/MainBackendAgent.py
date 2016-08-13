@@ -5,21 +5,26 @@ import time
 import json
 import getpass
 import wx
+from urllib import urlopen
+from lxml import etree
 
 #ytfiber backend
 #currently works on both linux and windows
 
 #inputs
-destination_path = '/home/isaykatsman/Desktop/client_destination'
+destination_path = '/home/isaykatsman/Downloads'
+downloads_subfolder = sys.argv[2]
+os.system('mkdir ' + destination_path + '/' + downloads_subfolder)
+destination_path = destination_path + '/' + downloads_subfolder
 folder_name = sys.argv[1] #'YTFiberDL'
 
 #start progress dialog
 app = wx.PySimpleApp()
 progressMax = 100
-dialog = wx.ProgressDialog("A progress box", "Time remaining", progressMax,
+dialog = wx.ProgressDialog("YT Fiber Progress", "Time remaining", progressMax,
         style=wx.PD_CAN_ABORT)
-progress = 100
-dialog.Update(progress, "Updated")
+progress = 0
+dialog.Update(progress, "Queueing downloads....")
 
 #first parse the folder in chrome data
 #data file is platform dependent
@@ -76,14 +81,22 @@ chromedriver = './chromedriver'
 driver = webdriver.Chrome(executable_path=chromedriver, chrome_options=chromeOptions)
 
 #stealth mode, for deployment - make browser head invisible
-#driver.set_window_size(0, 0)
-#driver.set_window_position(2000, 0)
+driver.set_window_size(0, 0)
+driver.set_window_position(2000, 0)
 
 os.environ['webdriver.chrome.driver'] = chromedriver
 driver.get("http://mp3fiber.com")
 
 #go through each url and download
 for i in range(0, len(folder_urls)):
+    #update progress bar
+    progress = int(((i)*1.00/len(folder_urls))*100)
+    single_gap = int(((1)*1.00/len(folder_urls))*100)
+
+    dialog.Update(progress, 'Converting video: ' + str(i+1) + '/' + str(len(folder_urls)))
+    wx.Usleep(500)
+
+    #start downloading videos
     line = folder_urls[i]
     print line
     old_url = driver.current_url #save this current url
@@ -94,12 +107,14 @@ for i in range(0, len(folder_urls)):
 
     # now click on link
     print "will now download"
+    dialog.Update(progress + int(single_gap/4.00), 'Preparing... ' + str(i + 1) + '/' + str(len(folder_urls)))
     link = driver.find_element_by_class_name('submit')#driver.find_element_by_name('submit')
     time.sleep(1)
     link.click() #necessary in most instances, sometimes might cause error so comment it out
 
     #now waiting to download
     print "now waiting as external download to fiber server occurs"
+    dialog.Update(progress + 2*int(single_gap/4.00), 'Fiber server DL ' + str(i + 1) + '/' + str(len(folder_urls)))
     time.sleep(3)
     # now when finished, should be able to click Download
     time_old = int(time.time())
@@ -112,6 +127,7 @@ for i in range(0, len(folder_urls)):
             print "fetching download link"
             link = driver.find_element_by_link_text('Download Now!')
             print "right before download"
+            dialog.Update(progress + 3 * int(single_gap/4.00), 'Downloading to PC ' + str(i + 1) + '/' + str(len(folder_urls)))
             time.sleep(1)
             link.click()
             print "clicked and pausing"
@@ -135,3 +151,6 @@ data_file.close()
 
 #quite browser
 driver.quit()
+
+#destroy dialog
+dialog.Destroy()
