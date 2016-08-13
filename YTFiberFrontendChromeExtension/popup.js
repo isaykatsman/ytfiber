@@ -54,11 +54,6 @@ function connect() {
 
 }
 
-//update dropdown
-function updateDropDown() {
-  $(".drop2:first-child").html($(this).text()+ ' <span class="caret"></span>');
-}
-
 document.addEventListener('DOMContentLoaded', function () {
   //startup messaging port
   var hostName = "com.ytfiber";
@@ -76,5 +71,15 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('download_btn').addEventListener(
       'click', sendPythonMessage);
 
-  //$(".dropdown2 li a").click(function() {});
+  $(".dropdown li a").click(function() {
+    $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
+  });
+
+  $("#option1").click(function() {
+    $('#machine_name').val('k80');
+  });
+
+  $("#option2").click(function() {
+    $('#machine_name').val('titanx');
+  });
 });

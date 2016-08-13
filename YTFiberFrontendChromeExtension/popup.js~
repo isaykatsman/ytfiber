@@ -20,19 +20,24 @@ function appendMessage(text) {
 function updateUiState() {
   if (port) {
     document.getElementById('connect-button').style.display = 'none';
-    document.getElementById('input-text').style.display = 'block';
-    document.getElementById('send-message-button').style.display = 'block';
+    document.getElementById('input-text').style.display = 'none';
+    document.getElementById('send-message-button').style.display = 'none';
   } else {
-    document.getElementById('connect-button').style.display = 'block';
+    document.getElementById('connect-button').style.display = 'none';
     document.getElementById('input-text').style.display = 'none';
     document.getElementById('send-message-button').style.display = 'none';
   }
 }
 
 function sendNativeMessage() {
-  message = {"text": document.getElementById('input-text').value};
+  //message = {"text": document.getElementById('input-text').value};
+  //port.postMessage(message);
+  //appendMessage("Sent message: <b>" + JSON.stringify(message) + "</b>");
+}
+
+function sendPythonMessage() {
+  message = {"subfolder": document.getElementById('subfolder-name').value};
   port.postMessage(message);
-  appendMessage("Sent message: <b>" + JSON.stringify(message) + "</b>");
 }
 
 function onNativeMessage(message) {
@@ -46,18 +51,30 @@ function onDisconnected() {
 }
 
 function connect() {
+
+}
+
+//update dropdown
+function updateDropDown() {
+  $(".drop2:first-child").html($(this).text()+ ' <span class="caret"></span>');
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  //startup messaging port
   var hostName = "com.ytfiber";
   appendMessage("Connecting to native messaging host <b>" + hostName + "</b>")
   port = chrome.runtime.connectNative(hostName);
   port.onMessage.addListener(onNativeMessage);
   port.onDisconnect.addListener(onDisconnected);
   updateUiState();
-}
 
-document.addEventListener('DOMContentLoaded', function () {
-  document.getElementById('connect-button').addEventListener(
-      'click', connect);
-  document.getElementById('send-message-button').addEventListener(
-      'click', sendNativeMessage);
-  updateUiState();
+  //document.getElementById('connect-button').addEventListener(
+      //'click', connect);
+  //document.getElementById('send-message-button').addEventListener(
+    //  'click', sendNativeMessage);
+
+  document.getElementById('download_btn').addEventListener(
+      'click', sendPythonMessage);
+
+  //$(".dropdown2 li a").click(function() {});
 });

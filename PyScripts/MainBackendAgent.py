@@ -4,6 +4,7 @@ from selenium import webdriver
 import time
 import json
 import getpass
+import wx
 
 #ytfiber backend
 #currently works on both linux and windows
@@ -11,6 +12,14 @@ import getpass
 #inputs
 destination_path = '/home/isaykatsman/Desktop/client_destination'
 folder_name = sys.argv[1] #'YTFiberDL'
+
+#start progress dialog
+app = wx.PySimpleApp()
+progressMax = 100
+dialog = wx.ProgressDialog("A progress box", "Time remaining", progressMax,
+        style=wx.PD_CAN_ABORT)
+progress = 100
+dialog.Update(progress, "Updated")
 
 #first parse the folder in chrome data
 #data file is platform dependent
