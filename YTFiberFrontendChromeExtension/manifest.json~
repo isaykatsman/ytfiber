@@ -1,0 +1,27 @@
+{
+  "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDcBHwzDvyBQ6bDppkIs9MP4ksKqCMyXQ/A52JivHZKh4YO/9vJsT3oaYhSpDCE9RPocOEQvwsHsFReW2nUEc6OLLyoCFFxIb7KkLGsmfakkut/fFdNJYh0xOTbSN8YvLWcqph09XAY2Y/f0AL7vfO1cuCqtkMt8hFrBGWxDdf9CQIDAQAB",
+  "name": "Native Messaging Example",
+  "manifest_version": 2,
+  "name": "YouTube Fiber",
+  "description": "This extension allows one to download all the YouTube content from a bookmarked chrome folder.",
+  "version": "1.1",
+  "minimum_chrome_version": "46",
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html",
+    "default_title": "YouTube Fiber"
+  },
+  "content_scripts": [{
+        "js": [
+               "js/jquery.js"
+              ],
+        "matches": [ "http://*/*", "https://*/*" ]
+  }],
+  "icons": {
+    "128": "chrome_browser-128.png"
+  },
+  "permissions": [
+    "bookmarks",
+    "nativeMessaging"
+  ]
+}

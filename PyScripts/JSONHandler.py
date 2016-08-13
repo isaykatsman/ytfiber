@@ -47,3 +47,9 @@ for i in range(0, num_children_of_bookmark_bar):
 #now go ahead and actually do the downloading
 print os.name
 print getpass.getuser()
+
+#load json from string
+s = '{"text":"lolextractme"}'
+data = json.loads(s)
+
+print data['text']
