@@ -15,6 +15,12 @@ try:
   import Tkinter
   import tkMessageBox
   import json
+  import sys, os, random
+  # import mechanize
+  from selenium import webdriver
+  import time
+  import getpass
+
 except ImportError:
   Tkinter = None
 
@@ -46,9 +52,16 @@ def read_thread_func(queue):
 
     #now parse the text element
     data = json.loads(str(text))
-    file = open('/home/isaykatsman/PycharmProjects/ytfiber/YTFiberFrontendChromeExtension/demo.txt','w+')
-    file.write(data['text']+'\n')
-    file.close()
+    try:
+      if data['subfolder'] != '':
+        file = open('/home/isaykatsman/PycharmProjects/ytfiber/YTFiberFrontendChromeExtension/demo.txt','w+')
+        file.write(data['subfolder']+'\n')
+        file.close()
+
+        #start the download
+        StartDownload(data['subfolder'])
+    except KeyError:
+      a=1
 
     if queue:
       queue.put(text)
@@ -64,8 +77,15 @@ def Main():
 
 #so far only pass folder name, assume downloads directory is local
 #todo: pass destination directory
-def StartDownload():
-  send_message('Starting download! (not really, this is just a stub')
+def StartDownload(subfolder):
+  #launch main backend
+  #in main backend write progress updates out to file,
+  #simply regularly check that file here in while loop, and send messages
+  #all throughout, terminate while loop when reach 'end' in outputted text file
+
+  #actually, because focus is still taken by webdriven window,
+  #use WX GUI to display progress barw
+  os.system('python MainBackendAgent.py ' + subfolder)
 
 if __name__ == '__main__':
   Main()

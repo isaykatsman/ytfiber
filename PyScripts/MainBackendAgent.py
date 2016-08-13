@@ -10,7 +10,7 @@ import getpass
 
 #inputs
 destination_path = '/home/isaykatsman/Desktop/client_destination'
-folder_name = 'YTFiberDL'
+folder_name = sys.argv[1] #'YTFiberDL'
 
 #first parse the folder in chrome data
 #data file is platform dependent
@@ -67,8 +67,8 @@ chromedriver = './chromedriver'
 driver = webdriver.Chrome(executable_path=chromedriver, chrome_options=chromeOptions)
 
 #stealth mode, for deployment - make browser head invisible
-driver.set_window_size(0, 0)
-driver.set_window_position(2000, 0)
+#driver.set_window_size(0, 0)
+#driver.set_window_position(2000, 0)
 
 os.environ['webdriver.chrome.driver'] = chromedriver
 driver.get("http://mp3fiber.com")
