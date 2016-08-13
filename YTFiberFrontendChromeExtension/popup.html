@@ -13,6 +13,15 @@
         max-width: 440px;
         min-width: 440px;
       }
+      p {
+        color: #FFFFFF;
+      }
+      .dl {
+        margin-bottom: 5px;
+      }
+      .break {
+        margin: 10px;
+      }
     </style>
 
     <!-- Boostrap Latest compiled and minified CSS -->
@@ -28,16 +37,16 @@
   <body>
     <div class="container">
       <div id="intro">
-        <h4 class="text-center" id="intro-txt"> Select the bookmarks folder, then click download </h4>
+        <h4 class="text-center" id="intro-txt"> <p>Select the bookmarks folder, then click download </p></h4>
       </div>
       <div id="buttons">
         <div class="row">
-          <div class="col-xs-6"> Subfolder in downloads: </div>
+          <div class="col-xs-6"> <p> Subfolder in downloads: </p> </div>
           <div class="col-xs-6"><input type="text" id="subfolder-name"/></div>
         </div>
         <br/>
         <div class="row">
-          <div class="col-xs-6"> Select folder in bookmarks: </div>
+          <div class="col-xs-6"> <p> Select folder in bookmarks: </p> </div>
           <div class="col-xs-6">
             <input type="hidden" name="machine_name" id="machine_name" value="Music 3"></input>
             <div class="dropdown">
@@ -55,12 +64,13 @@
           </div>
         </div>
         <br/>
-        <button class="btn btn-primary" id="download_btn" style="width:100%;" value="Download">Download</button>
+        <button class="btn btn-info dl" id="download_btn" style="width:100%;" value="Download">Download</button>
+        <br/>
+        <div class='break'></div>
       </div>
       <button id='connect-button'>Connect</button>
       <input id='input-text' type='text' />
       <button id='send-message-button'>Send</button>
-      <div id='response'></div>
     </div>
   </body>
 </html>

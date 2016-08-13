@@ -63,6 +63,9 @@ document.addEventListener('DOMContentLoaded', function () {
   port.onDisconnect.addListener(onDisconnected);
   updateUiState();
 
+  //initialize background content
+  document.body.style.backgroundImage = "url('bg.png')";
+
   //document.getElementById('connect-button').addEventListener(
       //'click', connect);
   //document.getElementById('send-message-button').addEventListener(

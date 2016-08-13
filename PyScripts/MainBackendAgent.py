@@ -7,6 +7,7 @@ import getpass
 import wx
 from urllib import urlopen
 from lxml import etree
+import collections
 
 #ytfiber backend
 #currently works on both linux and windows
@@ -17,6 +18,9 @@ downloads_subfolder = sys.argv[2]
 os.system('mkdir ' + destination_path + '/' + downloads_subfolder)
 destination_path = destination_path + '/' + downloads_subfolder
 folder_name = sys.argv[1] #'YTFiberDL'
+
+#aggregate keywords
+keywords = []
 
 #start progress dialog
 app = wx.PySimpleApp()
@@ -96,6 +100,12 @@ for i in range(0, len(folder_urls)):
     dialog.Update(progress, 'Converting video: ' + str(i+1) + '/' + str(len(folder_urls)))
     wx.Usleep(500)
 
+    #scrape the meta keywords from youtube link and stow in keywords
+    f = urlopen(folder_urls[i]).read()
+    tree = etree.HTML(f)
+    string_keys = tree.xpath("//meta[@name='keywords']")[0].get("content")
+    keywords.extend(string_keys.split(", "))
+
     #start downloading videos
     line = folder_urls[i]
     print line
@@ -145,6 +155,24 @@ for i in range(0, len(folder_urls)):
             break
     #found and clicked url
 
+#make sure progress is set to 100
+dialog.Update(progressMax, 'Converting video: ' + str(len(folder_urls)) + '/' + str(len(folder_urls)))
+
+#aggregate analytics
+counter = collections.Counter(keywords)
+
+#get 3 most common
+most_common = counter.most_common(3)
+#print 'Most common: ' + most_common[0][0] + ' ' + most_common[1][0] + ' ' + most_common[2][0]
+
+#output most common on simple dialog box
+dlg = wx.MessageDialog(None, 'According to the downloaded files, you\n'+
+                             'are most interested in content involving\n'+
+                             'the following: '+ most_common[0][0] + ', ' + most_common[1][0] + ',\n' +
+                             most_common[2][0] + '. Have a great day,\n' +
+                             'and thanks for using YouTube Fiber', 'Analytics', wx.OK)
+dlg.ShowModal()
+dlg.Destroy()
 
 #finally, close file
 data_file.close()
